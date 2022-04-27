@@ -3,4 +3,5 @@ opencv-contrib-python-headless
 streamlit_webrtc
 tflearn
 numpy
+mediapipe
 tensorflow
