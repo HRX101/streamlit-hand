@@ -38,6 +38,7 @@ p=0
 l=""
 pas=False
 p1=""
+m=[]
 mpDraw=mp.solutions.drawing_utils
 class VideoTransformer(VideoTransformerBase):
     def transform(self, frame):
@@ -46,6 +47,7 @@ class VideoTransformer(VideoTransformerBase):
         img=cv2.flip(img,1)
         gray1=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
         results=hands.process(gray1)
+       
         if results.multi_hand_landmarks:
             for hand_frame in results.multi_hand_landmarks:
                 mpDraw.draw_landmarks(img,hand_frame,mphands.HAND_CONNECTIONS)
@@ -58,9 +60,10 @@ class VideoTransformer(VideoTransformerBase):
                 lower = np.array([200, 200, 200])
                 upper = np.array([255, 255, 255])
                 thresh = cv2.inRange(roi, lower, upper)
-           # kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (20,20))
-            #detected_face= cv2.morphologyEx(detected_face, cv2.MORPH_CLOSE, kernel)
                 detected_face = cv2.resize( thresh,(50,50))
+                #kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (20,20))
+                #detected_face= cv2.morphologyEx(detected_face, cv2.MORPH_CLOSE, kernel)
+                
                 detected_face = np.array(detected_face).reshape((-1,50,50,1))
         
        # label = np.argmax(model.predict(detected_face))
@@ -72,53 +75,62 @@ class VideoTransformer(VideoTransformerBase):
             #print(model_out)
             
                 if np.argmax(model_out) == 0:
-                    my_label = 'open'
-                    #if p12=="":
-                   # p12=os.startfile('C:\\Windows\\System32\\write.exe')
-                        #press=cv2.waitKey(1)   
+                    my_label = 'A'
+                    m.append(my_label)
+                    st.write(my_label)
                 
                 elif np.argmax(model_out) == 1:
-                    my_label = 'close'
-                    #if p12==None:
-                   # os.system("taskkill /f /im  WordPad.exe")
-                        #press=cv2.waitKey(1)   
-                        #p12=""
+                    my_label = 'B'
+                    m.append(my_label)
+                    st.write(my_label)
                 elif np.argmax(model_out) == 2:
-                    my_label = 'lock'
-                #ctypes.windll.user32.LockWorkStation()
+                    my_label = 'C'
+                    m.append(my_label)
+                    st.write(my_label)
                 elif np.argmax(model_out) == 3:
-                    my_label = 'shot'
-                    #myScreenshot = pyautogui.screenshot()
-                    #myScreenshot.save('ss'+str(p)+".png")
-            
+                    my_label = 'D'
+                    m.append(my_label)
+                    st.write(my_label)
                 elif np.argmax(model_out) == 4:
-                    my_label = 'save' 
-                    #pyautogui.hotkey('ctrl', 's') 
+                    my_label = 'E' 
+                    m.append(my_label)
+                    st.write(my_label)
                 elif np.argmax(model_out) == 5:
-                    my_label = 'shutdown' 
+                    my_label = 'F' 
+                    m.append(my_label)
+                    st.write(my_label)
                 #os.system('shutdown/s/t 10')   
                 elif np.argmax(model_out) == 6:
-                    my_label = 'pdf'  
+                    my_label = 'G'
+                    m.append(my_label)
+                    st.write(my_label)
                 elif np.argmax(model_out) == 7:
-                    my_label = 'refresh'
+                    my_label = 'H'
+                    m.append(my_label)
+                    st.write(my_label)
                 #pyautogui.hotkey('win','d')   
                 elif np.argmax(model_out) == 8:
-                    my_label = 'turn-off'
+                    my_label = 'I'
+                    m.append(my_label)
                     
                 elif np.argmax(model_out) == 9:
-                    my_label = 'restart' 
+                    my_label = 'J' 
+                    m.append(my_label)
                 #os.system('shutodown/r/t 10')
                 elif np.argmax(model_out) == 10:
-                    my_label = 'unlock'     
+                    my_label = 'K'    
+                    m.append(my_label) 
                 else:
                     my_label = 'unkwnon'
+                    m.append(my_label)
             #print(my_label)
                 cv2.putText(img,my_label,(100,100),cv2.FONT_HERSHEY_COMPLEX,1,(255,0,0),1)
                 cv2.putText(img,str(p),(120,120),cv2.FONT_HERSHEY_COMPLEX,1,(255,0,0))
                 cv2.putText(img,str(confiedence),(120,180),cv2.FONT_HERSHEY_COMPLEX,1,(255,0,0))
+               
         return img
 
-
+st.write(m)
 webrtc_streamer(key="key", video_transformer_factory=VideoTransformer,
             rtc_configuration=RTCConfiguration(
                 {"iceServers":[{"urls":["stun:stun.l.google.com:19302"]}]}
@@ -135,7 +147,7 @@ hide_streamlit_style = """
   
             footer:after{
                 visibility:visible;
-                content:'Made by team Mythical Phoenix';
+                content:'Made by HP';
                 display:block;
                 color:red;
                 padding:5px;
